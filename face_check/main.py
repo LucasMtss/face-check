@@ -86,7 +86,7 @@ class FaceRecognitionApp:
     def __init__(self, master):
         self.master = master
         master.title("Reconhecimento Facial")
-        master.geometry("800x1200")
+        master.geometry("600x800")
 
         self.label = Label(master, text="Clique no botão para processar a imagem.")
         self.label.pack(pady=10)
