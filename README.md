@@ -15,6 +15,7 @@ O que me levou ao desenvolvimento deste software foi uma necessidade de confirma
 O sistema foi todo feito em python.
 O reconhecimento facial foi feito utilizando as bibliotecas DeepFace e OpenCV.
 Para a interface gráfica foi utilizado o tkinter
+Foi utilizado o conceito de threads para realizar a verificação facial em paralelo com a execução do programa
 Os dados são salvos no banco (SQLite), onde é possível fazer uma consulta por nome ou data
 
 ## Prints das telas
