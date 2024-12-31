@@ -7,25 +7,32 @@ def buscar_no_banco(data=None, nome=None):
     try:
         conn = sqlite3.connect('reconhecimento_facial.db')
         cursor = conn.cursor()
-        
-        # Consulta para obter pessoa, última data e contagem de presença
-        query = '''
-            SELECT pessoa, MAX(data) AS ultima_data, COUNT(pessoa) AS presenca 
-            FROM identificacoes
-            WHERE 1=1
-        '''
-        params = []
 
         if data:
-            query += ' AND data = ?'
-            params.append(data)
+            # Consulta para buscar registros que correspondem exatamente à data fornecida
+            query = '''
+                SELECT pessoa, data AS ultima_data
+                FROM identificacoes
+                WHERE data = ?
+            '''
+            params = [data]
+        else:
+            # Consulta para agrupar registros por pessoa
+            query = '''
+                SELECT pessoa, MAX(data) AS ultima_data, COUNT(pessoa) AS presenca
+                FROM identificacoes
+                WHERE 1=1
+            '''
+            params = []
 
         if nome:
             query += ' AND pessoa LIKE ?'
             params.append(f'%{nome}%')
 
-        query += ' GROUP BY pessoa ORDER BY pessoa'
+        if not data:
+            query += ' GROUP BY pessoa'
 
+        query += ' ORDER BY pessoa'
         cursor.execute(query, params)
         resultados = cursor.fetchall()
 
@@ -78,7 +85,7 @@ class VisualizarDadosApp:
         # Converter a data para o formato YYYY-MM-DD
         if data:
             try:
-                data = datetime.strptime(data, "%d-%m-%Y").strftime("%Y-%m-%d")
+                datetime.strptime(data, "%d-%m-%Y").strftime("%Y-%m-%d")
             except ValueError:
                 messagebox.showerror("Erro", "A data deve estar no formato DD-MM-YYYY.")
                 return
